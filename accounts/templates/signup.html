@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+{% block content %}
+<h1>회원가입</h1>
+<form action="{%url 'signup'%}" method="post">
+    {%csrf_token%}
+    <p>
+        ID <input type="text" name="username">
+    </p>
+    <p>
+        닉네임
+        <input type="text" name="nickname">
+    </p>
+    <p>
+        PASSWORD
+        <input type="password" name="password1">
+    </p>
+    <p>
+        PASSWORD_확인
+        <input type="password" name="password2">
+    </p>
+
+    <input type="submit" value="회원가입">
+</form>
+{% endblock %}

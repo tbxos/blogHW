@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+<img src="{%static '구마적.png'%}">
+<br><br>
+<form action="{%url 'search'%}" style="display:inline;">
+        <select name="search_filter">
+            <option value="제목">제목</option>
+            <option value="내용">내용</option>
+            <option value="제목+내용">제목+내용</option>
+        </select>
+        <input type="text" name="search">
+        <input class="btn btn-danger" type="submit" value="검색">
+    </form>
+    <form action="{%url 'category'%}" style="display:inline">
+        <select name="category">
+            <option value="공지">공지</option>
+            <option value="자유">자유</option>
+            <option value="질문">질문</option>
+            <input class="btn btn-danger" type="submit" value="검색">
+        </select>
+    </form>
+{% if user.is_authenticated %}
+<form action="{%url 'logout'%}" method="POST" style="display: inline;float:right">
+    {%csrf_token%}
+    <span>{{user.username}} 어서옵쇼 
+        <a type="buton" class="btn btn-primary " href="{%url 'create'%}">글쓰기</a> 
+        <input class="btn btn-primary" type="submit" value="로그아웃">
+    </span>
+</form>
+{% else %}
+<a href="{%url 'login'%}">로그인</a>
+<a href="{%url 'signup'%}">회원가입</a>
+{%endif%}
+
+
+{%for p in posts%}
+<p>글 번호 : {{p.id}}</p>
+<p>카테고리 : {{p.category}}</p>
+<a href="{%url 'read' p.id%}">글 제목 : {{p.title}}</a>
+<p>글 내용 : {{p.content|truncatewords:10}}</p>
+<p>글 작성 시간 : {{p.updated_at|date:'Y-m-d'}}</p>
+<hr>
+{%endfor%}
+<nav>
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li class="page-item "><a class="page-link" href="?page={{ posts.previous_page_number }}">&lt;</a></li>
+        {% endif %}
+        {% if posts.number > 2 %}
+        <li class="page-item"><a class="page-link" href="?page=1">&lt;&lt;</a></li>
+        {%endif%}
+        {% if posts.has_next %}
+        <li class="page-item ml-auto"><a class="page-link" href="?page={{ posts.next_page_number }}">&gt;</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<style>
+        body {
+            background-color: bisque
+        }
+    </style>
+{% endblock %}
